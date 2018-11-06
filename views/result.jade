@@ -1,0 +1,71 @@
+extends layout
+
+block content
+  .jumbotron.rHeader(style="top:0px")
+    .sHeader
+      a.sHeaderLogo(href='/', title='Go to Insta-MediCare Search Home Page')
+        img#sImgHeader(src='/images/logoText.png', alt='Insta-MediCare')
+      div(style='width:100%')
+        div(style='width:100%')
+          a.sHeaderLogo(href='/', title='Go to Insta-MediCare Search Home Page')
+            img#sImgHeaderMobile(src='/images/logoText.png', alt='Logo')
+        form#sForm(method='get', action='/getDiagnosis')
+          .sInpt
+            input#sBar(name='sQuery', type='text', placeholder='Search Here..', value="#{query}" autocomplete='off')
+            button#sBtn(type='submit')
+              i#sBtnIcon.ionicons.ion-ios-search-strong
+
+  #mainResults(style='display:block')
+    .sResults
+      #recentSearch
+        #rLog
+          #numberResults Showing #{diagnosisList.length} results
+
+        .sResultsMain
+          - for(i in diagnosisList)
+            .sResultBox
+              .mineNameHeader
+                div(style='display:inline-flex;float:left')
+                  p(style='margin:10px;font-weight:500') #{diagnosisList[i].Issue.Name}
+                .rStats(style='float:right;display:inline-flex;padding:8px;transform:scale(0.7)')
+                  .star-ratings-css
+                    .star-ratings-css-top(style='width: #{diagnosisList[i].Issue.Accuracy}')
+                      - for(var j=0;j<5;j++)
+                        span ★
+                    .star-ratings-css-bottom
+                      - for(var j=0;j<5;j++)
+                        span ★
+                  i.fa.fa-download.rSavedBtn(data-toggle='tooltip', title='Save')
+              table(style='width:100%;')
+                tbody
+                  tr(style='float:left;margin:0px')
+                    td
+                      p.rClassType  #{diagnosisList[i].Issue.ProfName}
+                      hr(style='margin-top:0px;margin-bottom:0px')
+                      p.rDetails
+                        span(style='font-weight:500') ICD Name
+                        | : #{diagnosisList[i].Issue.IcdName}
+                        br
+                        span(style='font-weight:500') ICD
+                        | : #{diagnosisList[i].Issue.Icd}
+                        br
+                        span(style='font-weight:500') Specialisation
+                        | : 
+                        - for(each in diagnosisList[i].Specialisation){
+                        -   if(each == diagnosisList[i].Specialisation.length-1)
+                              | #{diagnosisList[i].Specialisation[each].Name}    
+                        - else {
+                              | #{diagnosisList[i].Specialisation[each].Name}, 
+                        - }
+                        - }
+                        br
+    div(style='position:fixed')
+      .sResultsMine
+
+  script.
+    $(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+    $('.rToolBtns.rSaved .badge').text(localStorage.length);
+    });
+  script(src='/javascripts/result.js')        
+        
